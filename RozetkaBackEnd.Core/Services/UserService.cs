@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RozetkaBackEnd.Core.Dtos.User;
+using RozetkaBackEnd.Core.Entites.Token;
 using RozetkaBackEnd.Core.Entites.User;
+using RozetkaBackEnd.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +13,15 @@ namespace RozetkaBackEnd.Core.Services
 {
     public class UserService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly JwtService _jwtService;
+
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JwtService jwtService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _jwtService = jwtService;
         }
 
         public async Task<ServiceResponse> LoginUserAsync(LoginUserDto model)
@@ -36,13 +41,16 @@ namespace RozetkaBackEnd.Core.Services
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: true);
             if (result.Succeeded)
             {
+                var tokens = await _jwtService.GenerateJwtTokensAsync(user);
 
                 return new ServiceResponse
                 {
+                    AccessToken = tokens.Token,
+                    RefreshToken = tokens.refreshToken.Token,
+                    Message = "Logged in successfully",
                     Success = true,
-
-                    Message = "You SignIn",
                 };
+               
             }
             if (result.IsNotAllowed)
             {

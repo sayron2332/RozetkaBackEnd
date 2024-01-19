@@ -13,7 +13,7 @@ namespace RozetkaBackEnd.Core.AutoMappers.Users
     {
         public AutoMapperUserProfile()
         {
-            CreateMap<LoginUserDto,User> ();
+            CreateMap<LoginUserDto,AppUser> ();
         }
     }
 }

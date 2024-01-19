@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RozetkaBackEnd.Core.Entites.Token;
 using RozetkaBackEnd.Core.Entites.User;
 using RozetkaBackEnd.Infrastructure.Initializers;
 using System;
@@ -20,6 +21,8 @@ namespace RozetkaBackEnd.Infrastructure.Context
             SeedRoleAndUser.SeedRolesAndUsers(builder);
         }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-        DbSet<User> Users { get; set; }
+        DbSet<AppUser> Users { get; set; }
+
+        DbSet<RefreshToken> Token { get; set; }
     }
 }

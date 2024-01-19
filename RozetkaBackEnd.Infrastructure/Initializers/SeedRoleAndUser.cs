@@ -30,8 +30,8 @@ namespace RozetkaBackEnd.Infrastructure.Initializers
                 NormalizedName = "USER"
             });
 
-            var hasher = new PasswordHasher<User>();
-            builder.Entity<User>().HasData(new User
+            var hasher = new PasswordHasher<AppUser>();
+            builder.Entity<AppUser>().HasData(new AppUser
             {
                 Id = ADMIN_ID,
                 FirstName = "Nazar",

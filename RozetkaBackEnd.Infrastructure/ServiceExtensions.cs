@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RozetkaBackEnd.Core.Entites.User;
+using RozetkaBackEnd.Core.Interfaces;
 using RozetkaBackEnd.Infrastructure.Context;
+using RozetkaBackEnd.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,7 @@ namespace RozetkaBackEnd.Infrastructure
         }
         public static void AddInfrastructureServices(this IServiceCollection services)
         {
-            services.AddIdentity<User, IdentityRole>(options =>
+            services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = true;
                 options.Lockout.MaxFailedAccessAttempts = 5;
@@ -36,6 +38,11 @@ namespace RozetkaBackEnd.Infrastructure
             })
                .AddEntityFrameworkStores<AppDbContext>()
                .AddDefaultTokenProviders();
+        }
+
+        public static void AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
     }

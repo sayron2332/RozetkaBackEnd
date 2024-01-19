@@ -14,6 +14,7 @@ namespace RozetkaBackEnd.Core
         public static void AddCoreServices(this IServiceCollection services)
         {
             services.AddTransient<UserService>();
+            services.AddTransient<JwtService>();
         }
 
         public static void AddAutoMapper(this IServiceCollection services)
