@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using RozetkaBackEnd.Core.Dtos.User;
 using RozetkaBackEnd.Core.Entites.Token;
 using RozetkaBackEnd.Core.Entites.User;
@@ -16,12 +17,14 @@ namespace RozetkaBackEnd.Core.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly JwtService _jwtService;
+        private readonly IMapper _autoMapper;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JwtService jwtService)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JwtService jwtService, IMapper autoMapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtService = jwtService;
+            _autoMapper = autoMapper;
         }
 
         public async Task<ServiceResponse> LoginUserAsync(LoginUserDto model)
@@ -74,6 +77,39 @@ namespace RozetkaBackEnd.Core.Services
                 Success = false,
                 Message = "User or password incorrect."
             };
+        }
+
+        public async Task<ServiceResponse> RegisterUserAsync(RegisterUserDto newUser)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(newUser.Email);
+            if (user != null)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "this user already exist",
+                };
+            }
+
+            AppUser mappedUser = _autoMapper.Map<AppUser>(newUser);
+
+            var result = await _userManager.CreateAsync(mappedUser);
+            if (result.Succeeded)
+            {
+                return new ServiceResponse
+                {
+                    Success = true,
+                    Message = "user successfully created",
+                    
+                };
+            }
+            return new ServiceResponse
+            {
+                Success = false,
+                Message = "Error",
+                Errors = result.Errors
+            };
+
         }
 
     }

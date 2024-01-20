@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RozetkaBackEnd.Core.AutoMappers.Users
+namespace RozetkaBackEnd.Core.Mapper.user
 {
-    internal class AutoMapperUserProfile : Profile
+    public class AutoMapperUserProfile : Profile
     {
-        public AutoMapperUserProfile()
+        public AutoMapperUserProfile() 
         {
-            CreateMap<LoginUserDto,AppUser>();
+            CreateMap<RegisterUserDto, AppUser>().ForMember(dst => dst.UserName, act => act.MapFrom(src => src.Email));
         }
     }
 }

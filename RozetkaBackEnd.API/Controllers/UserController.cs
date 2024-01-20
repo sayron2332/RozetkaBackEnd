@@ -18,7 +18,7 @@ namespace RozetkaBackEnd.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserDto model)
         {
             var validator = new LoginUserValidation();
@@ -26,6 +26,23 @@ namespace RozetkaBackEnd.API.Controllers
             if (validationResult.IsValid)
             {
                 var result = await _userService.LoginUserAsync(model);
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(validationResult.Errors);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterUserDto model)
+        {
+            RegisterUserValidation validator = new RegisterUserValidation();
+            var validationResult = validator.Validate(model);
+            if (validationResult.IsValid)
+            {
+                var result = await _userService.RegisterUserAsync(model);
                 return Ok(result);
             }
             else

@@ -48,13 +48,12 @@ namespace RozetkaBackEnd.API
 
             builder.Services.AddRepositories();
 
-        
             //Add Core Services
             builder.Services.AddCoreServices();
 
-           
+            builder.Services.AddAutoMapper();
 
-  
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -90,10 +89,6 @@ namespace RozetkaBackEnd.API
             }); 
 
             var app = builder.Build();
-
-            //Get Connection strings
-
-
 
             if (app.Environment.IsDevelopment())
             {
