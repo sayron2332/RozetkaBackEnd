@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RozetkaBackEnd.Core.Entites.Category;
 using RozetkaBackEnd.Core.Entites.Token;
 using RozetkaBackEnd.Core.Entites.User;
 using RozetkaBackEnd.Infrastructure.Initializers;
@@ -22,7 +23,7 @@ namespace RozetkaBackEnd.Infrastructure.Context
         }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         DbSet<AppUser> Users { get; set; }
-
+        DbSet<AppCategory> Categories { get; set; }
         DbSet<RefreshToken> Token { get; set; }
     }
 }

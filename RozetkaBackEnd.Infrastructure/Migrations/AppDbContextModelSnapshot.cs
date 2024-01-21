@@ -51,13 +51,13 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ce65363f-f1be-43f9-8d78-b437a2f188d2",
+                            Id = "74f0ab6b-7b5f-4080-aabc-56ce0650ed86",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3a0c2187-a8ff-455e-9609-dd291328ada6",
+                            Id = "83f70048-5ca3-4d02-a08d-d53ee9b7a4c9",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -226,8 +226,8 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "4240905d-2385-4afb-9a73-126f66f25ebd",
-                            RoleId = "ce65363f-f1be-43f9-8d78-b437a2f188d2"
+                            UserId = "e02b630c-1269-44ba-8d14-be6a4944e015",
+                            RoleId = "74f0ab6b-7b5f-4080-aabc-56ce0650ed86"
                         });
                 });
 
@@ -248,6 +248,23 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("RozetkaBackEnd.Core.Entites.Category.AppCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("RozetkaBackEnd.Core.Entites.Token.RefreshToken", b =>
@@ -297,6 +314,9 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -306,20 +326,21 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4240905d-2385-4afb-9a73-126f66f25ebd",
+                            Id = "e02b630c-1269-44ba-8d14-be6a4944e015",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "50f4b520-3c9b-4150-9481-2826df4fcb5b",
+                            ConcurrencyStamp = "bd11b497-84a1-49d5-a414-4cae69da2b7a",
                             Email = "xvtnxjgbyv@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "xvtnxjgbyv@gmail.com",
                             NormalizedUserName = "xvtnxjgbyv@gmail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEA/F5UwdAt7LMjBxhDdVsajJGMvsoZL7JXYbz03QtAPz7nIVrNx1+f2qJOZh71IOCg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENPkxPTgk1hX6PFZ8LkEO4S17R+pl7l57sAiGnNWgbVkHLY6Q3XpmQ59wsYKji5XxQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "xvtnxjgbyv@gmail.com",
                             FirstName = "Nazar",
+                            Image = "",
                             LastName = "Kurylovych"
                         });
                 });

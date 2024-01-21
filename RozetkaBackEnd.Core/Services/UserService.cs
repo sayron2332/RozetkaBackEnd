@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using RozetkaBackEnd.Core.Dtos.User;
 using RozetkaBackEnd.Core.Entites.Token;
@@ -79,6 +80,21 @@ namespace RozetkaBackEnd.Core.Services
             };
         }
 
+        private async Task<string> CreateImageUser(IFormFile file)
+        {
+            string extensions = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
+
+            string fileName = DateTime.Now.Ticks.ToString() + extensions;
+
+            string exactpath = Path.Combine(Directory.GetCurrentDirectory(), "Images\\User", fileName);
+
+            using (var stream = new FileStream(exactpath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return fileName;
+        }
         public async Task<ServiceResponse> RegisterUserAsync(RegisterUserDto newUser)
         {
             AppUser user = await _userManager.FindByEmailAsync(newUser.Email);
@@ -91,11 +107,16 @@ namespace RozetkaBackEnd.Core.Services
                 };
             }
 
+            string fileName = await CreateImageUser(newUser.ImageFile);
+            
             AppUser mappedUser = _autoMapper.Map<AppUser>(newUser);
+
+            mappedUser.Image = fileName;
 
             var result = await _userManager.CreateAsync(mappedUser);
             if (result.Succeeded)
             {
+              
                 return new ServiceResponse
                 {
                     Success = true,
@@ -103,11 +124,66 @@ namespace RozetkaBackEnd.Core.Services
                     
                 };
             }
+
+            File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Images\\User", fileName));
+
             return new ServiceResponse
             {
                 Success = false,
                 Message = "Error",
                 Errors = result.Errors
+            };
+
+        }
+
+        public async Task<ServiceResponse> LogoutAsync()
+        {
+            IEnumerable<RefreshToken> tokens = await _jwtService.GetAll();
+            foreach (RefreshToken token in tokens)
+            {
+                await _jwtService.Delete(token);
+            }
+
+            await _signInManager.SignOutAsync();
+            return new ServiceResponse
+            {
+                Success= true,
+                Message = "User succes logout"
+
+            };
+        }
+
+        public async Task<ServiceResponse> DeleteAsync(string id)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+                return new ServiceResponse
+                {
+                    Success = true,
+                    Message = "User deleted"
+
+                };
+            }
+
+            return new ServiceResponse
+            {
+                Success = false,
+                Message = "User not found"
+
+            };
+
+        }
+        public async Task<ServiceResponse> UpdateAsync(EditUserDto updateUser)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(updateUser.Email);
+
+            return new ServiceResponse
+            {
+                Success = false,
+                Message = "User not found"
+
             };
 
         }

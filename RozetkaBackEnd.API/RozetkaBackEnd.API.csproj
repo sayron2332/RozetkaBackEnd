@@ -21,4 +21,8 @@
     <ProjectReference Include="..\RozetkaBackEnd.Infrastructure\RozetkaBackEnd.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\User\" />
+  </ItemGroup>
+
 </Project>

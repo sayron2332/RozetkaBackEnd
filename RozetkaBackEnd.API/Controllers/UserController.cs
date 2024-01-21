@@ -9,6 +9,7 @@ namespace RozetkaBackEnd.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -49,6 +50,25 @@ namespace RozetkaBackEnd.API.Controllers
             {
                 return BadRequest(validationResult.Errors);
             }
+        }
+
+        [HttpGet("logout")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            var result = await _userService.LogoutAsync();
+            return Ok(result);
+        }
+
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteAsync(string id)
+        {
+            var result = await _userService.DeleteAsync(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

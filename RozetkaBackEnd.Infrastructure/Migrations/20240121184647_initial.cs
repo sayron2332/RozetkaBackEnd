@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RozetkaBackEnd.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,6 +35,7 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -53,6 +54,19 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,19 +205,19 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3a0c2187-a8ff-455e-9609-dd291328ada6", null, "user", "USER" },
-                    { "ce65363f-f1be-43f9-8d78-b437a2f188d2", null, "admin", "ADMIN" }
+                    { "74f0ab6b-7b5f-4080-aabc-56ce0650ed86", null, "admin", "ADMIN" },
+                    { "83f70048-5ca3-4d02-a08d-d53ee9b7a4c9", null, "user", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "4240905d-2385-4afb-9a73-126f66f25ebd", 0, "50f4b520-3c9b-4150-9481-2826df4fcb5b", "AppUser", "xvtnxjgbyv@gmail.com", true, "Nazar", "Kurylovych", false, null, "xvtnxjgbyv@gmail.com", "xvtnxjgbyv@gmail.com", "AQAAAAIAAYagAAAAEA/F5UwdAt7LMjBxhDdVsajJGMvsoZL7JXYbz03QtAPz7nIVrNx1+f2qJOZh71IOCg==", null, false, "", false, "xvtnxjgbyv@gmail.com" });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "Image", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "e02b630c-1269-44ba-8d14-be6a4944e015", 0, "bd11b497-84a1-49d5-a414-4cae69da2b7a", "AppUser", "xvtnxjgbyv@gmail.com", true, "Nazar", "", "Kurylovych", false, null, "xvtnxjgbyv@gmail.com", "xvtnxjgbyv@gmail.com", "AQAAAAIAAYagAAAAENPkxPTgk1hX6PFZ8LkEO4S17R+pl7l57sAiGnNWgbVkHLY6Q3XpmQ59wsYKji5XxQ==", null, false, "", false, "xvtnxjgbyv@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "ce65363f-f1be-43f9-8d78-b437a2f188d2", "4240905d-2385-4afb-9a73-126f66f25ebd" });
+                values: new object[] { "74f0ab6b-7b5f-4080-aabc-56ce0650ed86", "e02b630c-1269-44ba-8d14-be6a4944e015" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -267,6 +281,9 @@ namespace RozetkaBackEnd.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Token");
